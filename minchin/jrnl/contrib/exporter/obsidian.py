@@ -1,22 +1,18 @@
-from minchin.jrnl.plugins.base import BaseExporter
-
-__version__ = "1.0.0-dev"
-
-
-import os
+from pathlib import Path
 import re
 import sys
 
 from minchin.jrnl.color import ERROR_COLOR, RESET_COLOR, WARNING_COLOR
+from minchin.jrnl.plugins.base import BaseExporter
 
-
+__version__ = "1.0.0-dev"
 
 
 class Exporter(BaseExporter):
     """
     This Exporter can convert entries and journals into Markdown formatted text
     with YAML front matter.
-    
+
     It is explicitly designed to produce source files for importing into `Obsidian
     <https://obsidian.md/>`_.
     """
@@ -50,31 +46,37 @@ class Exporter(BaseExporter):
         previous_line = ""
         # warn_on_heading_level = False
 
-        # TODO:Add the title to the body, if it's not the first line
-
-        # TODO: check for double backslashes
+        # TODO: check for double backslashes?
+        first_line_flag = True
 
         for line in body.splitlines(True):
+            # If the first line isn't a Level 1 heading, add the entry title as
+            # a Level 1 heading
+            if first_line_flag:
+                first_line_flag = False
+                if not re.match(r"^# ", line):
+                    newbody = newbody + f"# {entry.title}\n\n"
+
             if False:
                 pass
-        #     if re.match(r"^#+ ", line):
-        #         # ATX style headings
-        #         newbody = newbody + previous_line + heading + line
-        #         if re.match(r"^#######+ ", heading + line):
-        #             warn_on_heading_level = True
-        #         line = ""
-        #     elif re.match(r"^=+$", line.rstrip()) and not re.match(
-        #         r"^$", previous_line.strip()
-        #     ):
-        #         # Setext style H1
-        #         newbody = newbody + heading + "# " + previous_line
-        #         line = ""
-        #     elif re.match(r"^-+$", line.rstrip()) and not re.match(
-        #         r"^$", previous_line.strip()
-        #     ):
-        #         # Setext style H2
-        #         newbody = newbody + heading + "## " + previous_line
-        #         line = ""
+            #     if re.match(r"^#+ ", line):
+            #         # ATX style headings
+            #         newbody = newbody + previous_line + heading + line
+            #         if re.match(r"^#######+ ", heading + line):
+            #             warn_on_heading_level = True
+            #         line = ""
+            #     elif re.match(r"^=+$", line.rstrip()) and not re.match(
+            #         r"^$", previous_line.strip()
+            #     ):
+            #         # Setext style H1
+            #         newbody = newbody + heading + "# " + previous_line
+            #         line = ""
+            #     elif re.match(r"^-+$", line.rstrip()) and not re.match(
+            #         r"^$", previous_line.strip()
+            #     ):
+            #         # Setext style H2
+            #         newbody = newbody + heading + "## " + previous_line
+            #         line = ""
             elif multi_tag_regex.match(line):
                 # Tag only lines
                 line = ""
@@ -131,13 +133,27 @@ class Exporter(BaseExporter):
             frontmatter_end="---\n\n",
         )
 
-    # @classmethod
-    # def export_journal(cls, journal):
-    #     """Returns an error, as Obsidian export requires a directory as a target."""
-    #     print(
-    #         "{}ERROR{}: Obsidian export must be to individual files. Please specify a directory to export to.".format(
-    #             ERROR_COLOR, RESET_COLOR
-    #         ),
-    #         file=sys.stderr,
-    #     )
-    #     raise NotImplementedError
+    @classmethod
+    def export_journal(cls, journal):
+        """Returns an error, as Obsidian export requires a directory as a target."""
+        # minchin.jrnl prints the error message
+        raise NotImplementedError
+
+    @classmethod
+    def make_filename(cls, entry):
+        """Determine the filename to save an individual entry as."""
+        if hasattr(entry, "uuid"):
+            # DayOne journals allowed a single entry per day
+            fn = (
+                Path(entry.date.strftime("%Y"))
+                / entry.date.strftime("%m")
+                / entry.date.strftime("%d")
+            )
+            fn = fn.with_suffix("." + cls.extension)
+            return fn
+
+        else:
+            return super().make_filename(entry)
+        # return entry.date.strftime("%Y-%m-%d") + "_{}.{}".format(
+        #     cls._slugify(str(entry.title)), cls.extension
+        # )
