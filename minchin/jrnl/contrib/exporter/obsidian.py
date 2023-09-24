@@ -55,7 +55,7 @@ class Exporter(BaseExporter):
             if first_line_flag:
                 first_line_flag = False
                 if not re.match(r"^# ", line):
-                    newbody = newbody + f"# {entry.title}\n\n"
+                    newbody = newbody + f"# {entry.title}\n"
 
             if False:
                 pass
@@ -144,16 +144,35 @@ class Exporter(BaseExporter):
         """Determine the filename to save an individual entry as."""
         if hasattr(entry, "uuid"):
             # DayOne journals allowed a single entry per day
+            # Daily notes format
             fn = (
                 Path(entry.date.strftime("%Y"))
                 / entry.date.strftime("%m")
                 / entry.date.strftime("%d")
             )
+
+            # # Weekly Notes format
+            # fn = (
+            #     Path(entry.date.strftime("%G"))
+            #     / entry.date.strftime("%G-W%W")
+            # )
+
+            # # zettel format
+            # # does assume that no two entries are at the same time
+            # fn = Path(entry.date.strftime("%Y%m%D%H%M"))
+            # print(fn)
+
             fn = fn.with_suffix("." + cls.extension)
             return fn
 
         else:
-            return super().make_filename(entry)
+            # zettel format
+            # does assume that no two entries are at the same time
+            fn = Path(entry.date.strftime("%Y%m%d%H%M"))
+
+            fn = fn.with_suffix("." + cls.extension)
+            return fn
+            # return super().make_filename(entry)
         # return entry.date.strftime("%Y-%m-%d") + "_{}.{}".format(
         #     cls._slugify(str(entry.title)), cls.extension
         # )
