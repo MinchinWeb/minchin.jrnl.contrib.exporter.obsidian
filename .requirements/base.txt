@@ -8,7 +8,7 @@ ansiwrap==0.8.4
     # via minchin-jrnl
 asteval==0.9.31
     # via minchin-jrnl
-cffi==1.15.1
+cffi==1.16.0
     # via cryptography
 colorama==0.4.6
     # via minchin-jrnl
@@ -26,7 +26,7 @@ more-itertools==10.1.0
     # via jaraco-classes
 parsedatetime==2.6
     # via minchin-jrnl
-platformdirs==3.10.0
+platformdirs==3.11.0
     # via minchin-jrnl
 pycparser==2.21
     # via cffi
