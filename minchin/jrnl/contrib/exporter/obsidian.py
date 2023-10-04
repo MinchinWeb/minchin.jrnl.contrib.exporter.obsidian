@@ -5,7 +5,7 @@ import sys
 from minchin.jrnl.color import ERROR_COLOR, RESET_COLOR, WARNING_COLOR
 from minchin.jrnl.plugins.base import BaseExporter
 
-__version__ = "1.0.0"
+__version__ = "1.0.1-dev"
 
 
 class Exporter(BaseExporter):
