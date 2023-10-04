@@ -55,9 +55,9 @@ license = {text = "MIT"}
 
 [project.urls]
 Homepage = "http://minchin.ca/minchin.jrnl/"
-# "Bug Tracker" = "https://github.com/MinchinWeb/minchin.jrnl/issues"
+"Bug Tracker" = "https://github.com/MinchinWeb/minchin.jrnl.contrib.exporter.obsidian/issues"
 # Documentation = "http://minchin.ca/minchin.jrnl/"
-# Repository = "https://github.com/MinchinWeb/minchin.jrnl"
+Repository = "https://github.com/MinchinWeb/minchin.jrnl.contrib.exporter.obsidian"
 # Changelog = "http://minchin.ca/minchin.jrnl/changelog/"
 # "Release Notes" = "https://blog.minchin.ca/label/minchinjrnl/"
 
