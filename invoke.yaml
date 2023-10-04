@@ -1,5 +1,5 @@
 releaser:
-    module_name: minchin.releaser
+    module_name: minchin.jrnl.contrib.exporter.obsidian
     here: .
     docs: None
     test: None
@@ -10,8 +10,6 @@ releaser:
     version_bump: none
     extra_packages:
         test:
-            - ansiwrap
-            - asteval
             - importlib-metadata
             - jaraco-classes
             - keyring
@@ -21,7 +19,10 @@ releaser:
             - pycparser
             - pywin32-ctypes
             - pyxdg
-            - textwrap3
             - tzlocal
             - zipp
+            - wheel
+            - build
+            - cryptography
+            - pyyaml
         pypi:
